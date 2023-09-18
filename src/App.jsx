@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import iconArrow from "./assets/iconArrow";
 
 function App() {
   const [inputDate, setInputDate] = useState({ day: "", month: "", year: "" });
@@ -17,11 +18,10 @@ function App() {
       [name]: value,
     }));
   };
-
   function calculateAge(inputDate) {
     const currentDate = new Date();
     const inputYear = parseInt(inputDate.year, 10);
-    const inputMonth = parseInt(inputDate.month, 10);
+    const inputMonth = parseInt(inputDate.month, 10) - 1; // เริ่มนับเดือนที่ 0
     const inputDay = parseInt(inputDate.day, 10);
 
     const currentYear = currentDate.getFullYear();
@@ -34,19 +34,22 @@ function App() {
 
     if (ageDays < 0) {
       ageMonths -= 1;
-      ageDays += new Date(inputYear, inputMonth, 0).getDate();
+
+      const lastDayOfMonth = new Date(inputYear, inputMonth + 1, 0).getDate(); // เพิ่ม 1 ใน inputMonth เพื่อนับวันสุดท้ายของเดือน
+      ageDays += lastDayOfMonth;
     }
+
     if (ageMonths < 0) {
       ageYears -= 1;
       ageMonths += 12;
     }
+
     return {
       years: ageYears,
       months: ageMonths,
       days: ageDays,
     };
   }
-
   return (
     <main className="">
       <body className="grid-container">
@@ -103,7 +106,9 @@ function App() {
         </div>
         <div>
           <hr className="line"></hr>
-          <button className="submit" onClick={handleSubmit}></button>
+          <div>
+            <button className="submit" onClick={handleSubmit}></button>
+          </div>
         </div>
         <div className="display">
           <h1>
@@ -124,6 +129,7 @@ function App() {
           Coded by <a href="#">Mr.Boworn Treesinsub</a>.
         </div>
       </body>
+      <iconArrow width="24" />
     </main>
   );
 }
